@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -14,24 +13,24 @@ public class Main {
             nums.add(number);
         }
         for (int key : nums) {
-            double startTime = System.nanoTime();
+            double startTimeIns = System.nanoTime();
             tree.insert(tree.getRoot(), key);
-            double endTime = System.nanoTime();
- //           System.out.println((int)(endTime - startTime));
+            double endTimeIns = System.nanoTime();
+//            System.out.println((int)(endTimeIns - startTimeIns));
         }
 
         for (int j = 1; j < 100; j ++) {
-            double startTime1 = System.nanoTime();
+            double startTimeFind = System.nanoTime();
             tree.find(nums.get(j));
-            double endTime1 = System.nanoTime();
-//            System.out.println((int)(endTime1 - startTime1));
+            double endTimeFind = System.nanoTime();
+//            System.out.println((int)(endTimeFind - startTimeFind));
         }
 
         for (int i = 1; i < 1000; i++) {
-            double startTime2 = System.nanoTime();
+            double startTimeDel = System.nanoTime();
             tree.delete(tree.getRoot(), nums.get(i));
-            double endTime2 = System.nanoTime();
-            System.out.println((int) (endTime2 - startTime2));
+            double endTimeDel = System.nanoTime();
+//            System.out.println((int) (endTimeDel - startTimeDel));
         }
     }
 }

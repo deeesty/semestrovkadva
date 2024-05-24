@@ -11,11 +11,78 @@ public class AVLTree {
             this.key = key;
         }
     }
+
     Node root;
 
     Node getRoot(){
         return root;
     }
+
+    Node insert(Node node, int key){
+        if(node == null){
+            return new Node(key);
+        } else if (node.key > key) {
+            node.left = insert(node.left, key);
+        } else if (node.key < key){
+            node.right = insert(node.right, key);
+        }else{
+            throw new RuntimeException("duplicate key");
+        }
+        return rebalance(node);
+    }
+
+    Node delete(Node node, int key){
+        if(node == null){
+            return node;
+        }else if(node.key > key){
+            node.left = delete(node.left, key);
+        }else if(node.key < key){
+            node.right = delete(node.right, key);
+        }
+        else{
+            if(node.left == null || node.right == null){
+                if(node.left == null){
+                    node = node.right;
+                }
+                else{
+                    node = node.left;
+                }
+            }
+            else{
+                Node furthestLeftChild = furthestLeftChild(node.right);
+                node.key = furthestLeftChild.key;
+                node.right = delete(node.right, node.key);
+            }
+        }
+        if(node == null){
+            node = rebalance(node);
+        }
+        return node;
+    }
+
+    public Node find(int key) {
+        Node current = root;
+        while (current != null) {
+            if (current.key == key) {
+                break;
+            }
+            if(current.key < key){
+                current = current.right;
+            }else{
+                current = current.right;
+            }
+        }
+        return current;
+    }
+
+    Node furthestLeftChild(Node node) {
+        Node current = node;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
+    }
+
     void updateHeight(Node n){
         n.height = 1 + Math.max(height(n.left), height(n.right));
     }
@@ -23,7 +90,8 @@ public class AVLTree {
     int height(Node n){
         if(n == null){
             return -1;
-        }else{
+        }
+        else{
             return n.height;
         }
     }
@@ -75,67 +143,5 @@ public class AVLTree {
             }
         }
         return z;
-    }
-
-    Node insert(Node node, int key){
-        if(node == null){
-            return new Node(key);
-        } else if (node.key > key) {
-            node.left = insert(node.left, key);
-        } else if (node.key < key){
-            node.right = insert(node.right, key);
-        }else{
-            throw new RuntimeException("duplicate key");
-        }
-        return rebalance(node);
-    }
-
-    Node delete(Node node, int key){
-        if(node == null){
-            return node;
-        }else if(node.key > key){
-            node.left = delete(node.left, key);
-        }else if(node.key < key){
-            node.right = delete(node.right, key);
-        }else{
-            if(node.left == null || node.right == null){
-                if(node.left == null){
-                    node = node.right;
-                }else{
-                    node = node.left;
-                }
-            }else{
-                Node mostLeftChild = mostLeftChild(node.right);
-                node.key = mostLeftChild.key;
-                node.right = delete(node.right, node.key);
-            }
-        }
-        if(node == null){
-            node = rebalance(node);
-        }
-        return node;
-    }
-
-    public Node find(int key) {
-        Node current = root;
-        while (current != null) {
-            if (current.key == key) {
-                break;
-            }
-            if(current.key < key){
-                current = current.right;
-            }else{
-                current = current.right;
-            }
-        }
-        return current;
-    }
-
-    Node mostLeftChild(Node node) {
-        Node current = node;
-        while (current.left != null) {
-            current = current.left;
-        }
-        return current;
     }
 }
